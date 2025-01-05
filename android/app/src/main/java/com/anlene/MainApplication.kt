@@ -1,4 +1,4 @@
-package com.anlean
+package com.anlene
 
 import android.app.Application
 import com.facebook.react.PackageList

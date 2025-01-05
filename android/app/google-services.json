@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "847596132408",
+    "project_id": "anlene-c5373",
+    "storage_bucket": "anlene-c5373.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847596132408:android:a091513e6c1c63c08deecd",
+        "android_client_info": {
+          "package_name": "com.anlene"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcyXfHTrNl_jVhYil0z7vDo3Mw1y5Su7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

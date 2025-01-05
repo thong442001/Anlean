@@ -1,4 +1,4 @@
-package com.anlean
+package com.anlene
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
