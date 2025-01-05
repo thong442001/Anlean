@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Anlean.app"
-               BlueprintName = "Anlean"
-               ReferencedContainer = "container:Anlean.xcodeproj">
+               BuildableName = "Anlene.app"
+               BlueprintName = "Anlene"
+               ReferencedContainer = "container:Anlene.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "AnleanTests.xctest"
-               BlueprintName = "AnleanTests"
-               ReferencedContainer = "container:Anlean.xcodeproj">
+               BuildableName = "AnleneTests.xctest"
+               BlueprintName = "AnleneTests"
+               ReferencedContainer = "container:Anlene.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Anlean.app"
-            BlueprintName = "Anlean"
-            ReferencedContainer = "container:Anlean.xcodeproj">
+            BuildableName = "Anlene.app"
+            BlueprintName = "Anlene"
+            ReferencedContainer = "container:Anlene.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Anlean.app"
-            BlueprintName = "Anlean"
-            ReferencedContainer = "container:Anlean.xcodeproj">
+            BuildableName = "Anlene.app"
+            BlueprintName = "Anlene"
+            ReferencedContainer = "container:Anlene.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

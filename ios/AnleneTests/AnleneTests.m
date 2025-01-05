@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface AnleanTests : XCTestCase
+@interface AnleneTests : XCTestCase
 
 @end
 
-@implementation AnleanTests
+@implementation AnleneTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
