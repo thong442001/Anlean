@@ -1,16 +1,15 @@
 import { TouchableOpacity, Image, StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/core';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParams } from '../../navigations/AppNavigation';
+import { useDispatch } from 'react-redux';
+import { changeIndex } from '../rtk/Reducer';
+import Header from '../components/Header';
 // firebase
 import firestore from '@react-native-firebase/firestore';
 
-const Page1: React.FC = () => {
+const Page4: React.FC = () => {
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-    
+  const dispatch = useDispatch();
+
   // firebase
   const fb = firestore().collection('test');
   const [list, setList] = useState([]);
@@ -41,15 +40,19 @@ const Page1: React.FC = () => {
       });
   };
 
-
+  const handleChangeIndex = (e: number) => {
+    dispatch(changeIndex(e));
+  };
 
   return (
     <ScrollView>
-      <Text>Page1</Text>
+      <Header />
+      <Text>Page4</Text>
       <TouchableOpacity style={styles.btn} onPress={() => {
-        navigation.navigate('Page2')
+        // navigation.navigate('Page5')
+        handleChangeIndex(1);
       }}>
-        <Text style={styles.txt_btn}>Kiểm tra ngay</Text>
+        <Text style={styles.txt_btn}>Nhận ngay</Text>
       </TouchableOpacity>
       {/* {list.map((item: any) => (
         <View key={item.id}>
@@ -62,7 +65,7 @@ const Page1: React.FC = () => {
   );
 };
 
-export default Page1
+export default Page4
 
 const styles = StyleSheet.create({
   image: {

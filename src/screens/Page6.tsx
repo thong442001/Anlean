@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image, ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import storage from '@react-native-firebase/storage';
-import { useNavigation } from '@react-navigation/core';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParams } from '../../navigations/AppNavigation';
+import { useDispatch } from 'react-redux';
+import { backHome } from '../rtk/Reducer';
+import Header from '../components/Header';
 const Page6: React.FC = () => {
 
-    const navigation =
-        useNavigation<NativeStackNavigationProp<RootStackParams>>();
+    const dispatch = useDispatch();
+
+    const handleChangeIndex = () => {
+        dispatch(backHome());
+    };
 
     // State để lưu URL hình ảnh và trạng thái loading
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -46,6 +49,7 @@ const Page6: React.FC = () => {
     // Trả về giao diện chính
     return (
         <View style={styles.container}>
+            <Header />
             {imageUrl ? (
                 <Image
                     source={{ uri: imageUrl }}
@@ -59,7 +63,7 @@ const Page6: React.FC = () => {
             )}
             <Text>Page6</Text>
             <TouchableOpacity style={styles.btn} onPress={() => {
-                navigation.navigate('Page1')
+                handleChangeIndex();
             }}>
                 <Text style={styles.txt_btn}>Nhận ngay</Text>
             </TouchableOpacity>
