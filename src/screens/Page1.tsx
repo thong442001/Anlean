@@ -82,7 +82,7 @@ const Page1: React.FC = () => {
         <View style={styles.vOfvBottom}>
           {/* btn kt nngay */}
           <View>
-            <BtnBorder title='KIỂM TRA NGAY' />
+            <BtnBorder title='KIỂM TRA NGAY' onpress={() => handleChangeIndex(1)} />
           </View>
           {/* 3 img */}
           <View style={styles.v3Img}>

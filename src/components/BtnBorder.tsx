@@ -5,14 +5,9 @@ import { changeIndex } from '../rtk/Reducer';
 import LinearGradient from 'react-native-linear-gradient';
 interface BtnBorderProps {
     title: string | null;
+    onpress?: () => void;
 }
-const BtnBorder: React.FC<BtnBorderProps> = ({ title }) => {
-
-    const dispatch = useDispatch();
-
-    const handleChangeIndex = (e: number) => {
-        dispatch(changeIndex(e));
-    };
+const BtnBorder: React.FC<BtnBorderProps> = ({ title, onpress }) => {
 
     return (
         <LinearGradient
@@ -21,10 +16,7 @@ const BtnBorder: React.FC<BtnBorderProps> = ({ title }) => {
             end={{ x: 1, y: 0 }}//Từ trái sang phải
             style={styles.gradientBorder}
         >
-            <TouchableOpacity style={styles.btn} onPress={() => {
-                // navigation.navigate('Page2');
-                handleChangeIndex(1);
-            }}>
+            <TouchableOpacity style={styles.btn} onPress={onpress}>
                 <Text style={styles.txt}>{title}</Text>
             </TouchableOpacity>
         </LinearGradient>

@@ -56,17 +56,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        margin: 10,
+        marginVertical: 10,
         //backgroundColor: '#000000',
     },
     logo: {
-        width: 70,
-        height: 32,
+        width: 60,
+        height: 16,
         resizeMode: 'contain',
     },
     icon: {
-        width: 32,
-        height: 32,
+        width: 24,
+        height: 24,
         resizeMode: 'contain',
     },
     txt: {

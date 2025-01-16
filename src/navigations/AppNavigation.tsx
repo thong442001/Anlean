@@ -28,7 +28,6 @@ const AppNavigation: React.FC = () => {
   const index = useSelector((state: any) => state.app?.index);
   const dataURL = useSelector((state: any) => state.app?.dataURL);
 
-
   useEffect(() => {
     //dataURL == null && dispatch(getDataPage());
     dispatch(getDataPage());

@@ -10,7 +10,6 @@ import BtnRed from '../components/BtnRed';
 import LinearGradient from 'react-native-linear-gradient';
 // firebase
 import firestore from '@react-native-firebase/firestore';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export interface DataPage2 {
   id: number;
@@ -32,20 +31,22 @@ const Page2: React.FC = () => {
   const arrMenu: string[] = ["Cơ", "Xương", "Khớp", "Đề kháng"];
 
   useEffect(() => {
-    if (indexPage2 < 4) {
-      fb.onSnapshot(querySnapshot => {
-        querySnapshot.forEach((doc) => {
-          doc.data()?.id == indexPage2 && setData({
-            id: doc.data()?.id,
-            title: doc.data()?.title,
-            img: doc.data()?.img,
-            content: doc.data()?.content,
+    setTimeout(() => {
+      if (indexPage2 < 4) {
+        fb.onSnapshot(querySnapshot => {
+          querySnapshot.forEach((doc) => {
+            doc.data()?.id == indexPage2 && setData({
+              id: doc.data()?.id,
+              title: doc.data()?.title,
+              img: doc.data()?.img,
+              content: doc.data()?.content,
+            });
           });
         });
-      });
-      //reset laai chon
-      setResult(null);
-    }
+        //reset laai chon
+        setResult(null);
+      }
+    }, 200);
   }, [indexPage2])
 
   const choice = (b: boolean) => {
@@ -56,7 +57,7 @@ const Page2: React.FC = () => {
       if (indexPage2 < 3) {
         dispatch(changeIndexPage2(1));
       }
-    }, 500);
+    }, 800);
   }
 
   const conform = () => {
@@ -96,7 +97,11 @@ const Page2: React.FC = () => {
           {/* vCircleNumberAndContent */}
           <View style={styles.vMap}>
             {arrMenu.map((item, index) => (
-              <View style={styles.vCircleNumberAndContent}>
+
+              <View
+                style={styles.vCircleNumberAndContent}
+                key={index}
+              >
                 {/* circleNumber */}
                 {arrPage2[index] != null ? (
                   arrPage2[index] ? <Image
@@ -186,7 +191,8 @@ export default Page2
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     alignItems: 'center',
   },
   vtBtnChon: {

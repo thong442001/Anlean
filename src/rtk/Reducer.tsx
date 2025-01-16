@@ -71,6 +71,8 @@ const appSlice = createSlice({
             // reset 
             state.indexPage2 = 0;
             state.arrPage2.length = 0;
+            // chuyển page
+            state.index = state.index + 1;
         });
         builder.addCase(PostInforUser.rejected, (state, action) => {
             console.log("...Rejected");

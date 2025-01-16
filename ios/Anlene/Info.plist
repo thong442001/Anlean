@@ -49,24 +49,25 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>SVN-Gotham Black Italic.otf</string>
-		<string>SVN-Gotham Black.otf</string>
-		<string>SVN-Gotham Bold Italic.otf</string>
-		<string>SVN-Gotham Bold.otf</string>
-		<string>SVN-Gotham Book Italic.otf</string>
-		<string>SVN-Gotham Book.otf</string>
-		<string>SVN-Gotham Italic.otf</string>
-		<string>SVN-Gotham Light Italic.otf</string>
-		<string>SVN-Gotham Light.otf</string>
-		<string>SVN-Gotham Regular.otf</string>
-		<string>SVN-Gotham Thin Italic.otf</string>
-		<string>SVN-Gotham Thin.otf</string>
-		<string>SVN-Gotham Ultra Italic.otf</string>
-		<string>SVN-Gotham Ultra.otf</string>
-		<string>SVN-Gotham XLight Italic.otf</string>
-		<string>SVN-Gotham XLight.otf</string>
-		<string>SVN-Gotham Bold.ttf</string>
-		<string>SVN-Gotham Light.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>FontAwesome6_Brands.ttf</string>
+		<string>FontAwesome6_Regular.ttf</string>
+		<string>FontAwesome6_Solid.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
 	</array>
 </dict>
 </plist>

@@ -1,4 +1,10 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const {
+    getDefaultConfig,
+    mergeConfig
+} = require('@react-native/metro-config');
+const {
+    wrapWithReanimatedMetroConfig,
+} = require('react-native-reanimated/metro-config');
 
 /**
  * Metro configuration
@@ -6,6 +12,12 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = {};
+// const config = {};
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+// Hợp nhất cấu hình mặc định và cấu hình từ Reanimated
+const config = mergeConfig(defaultConfig, {
+    // Các cài đặt tùy chỉnh nếu cần
+});
+//module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = wrapWithReanimatedMetroConfig(config);
