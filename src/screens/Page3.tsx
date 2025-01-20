@@ -180,7 +180,7 @@ const Page3: React.FC = () => {
                     <LinearGradient
                         colors={data?.arrColor}
                         start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}//Từ trái sang phải
+                        end={{ x: 1, y: 1 }}
                         style={styles.vLg}
                     ></LinearGradient>
                 }

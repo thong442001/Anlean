@@ -16,9 +16,11 @@ import Header from '../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
 import LgTxtYellow from '../components/LgTxtYellow';
 import BtnBorder from '../components/BtnBorder';
+import LgTxtGreen from '../components/LgTxtGreen';
 // firebase
 import firestore from '@react-native-firebase/firestore';
 export interface DataPage4 {
+  arrColor: string[];
   title: string;
   img1: string;
   img2: string;
@@ -29,20 +31,41 @@ export interface DataPage4 {
   content3: string,
   content4: string,
   content5: string,
+  footer1: string,
+  footer2: string,
 }
 const Page4: React.FC = () => {
 
   const dispatch = useDispatch();
+  const arrPage2: [] = useSelector((state: any) => state.app?.arrPage2);
+  const [result, seResult] = useState<string>(``);
+
   const [data, setData] = useState<DataPage4>();
   const [seeMore, setSeeMore] = useState<boolean>(false);
-  // firebase
-  const fb = firestore().collection('Anlene-Page4-Green');
 
+  // firebase
+  const fb = firestore().collection(`Anlene-Page4-${result}`);
+
+  useEffect(() => {
+    var countF: number = 0;
+    arrPage2.map((item) => {
+      item == false && countF++
+    })
+    console.log(countF)
+    if (countF >= 3) {
+      seResult(`Grey`);
+    } else if (countF >= 1) {
+      seResult(`Yellow`);
+    } else {
+      seResult(`Green`);
+    }
+  }, [])
 
   useEffect(() => {
     fb.onSnapshot(querySnapshot => {
       querySnapshot.forEach((doc) => {
         setData({
+          arrColor: doc.data()?.arrColor,
           title: doc.data()?.title,
           img1: doc.data()?.img1,
           img2: doc.data()?.img2,
@@ -53,10 +76,14 @@ const Page4: React.FC = () => {
           content3: doc.data()?.content3,
           content4: doc.data()?.content4,
           content5: doc.data()?.content5,
+          footer1: doc.data()?.footer1,
+          footer2: doc.data()?.footer2,
         });
+        //console.log(doc.data()?.arrColor)
       });
     });
-  }, [])
+    //console.log(data)
+  }, [result])
 
   const handleChangeIndex = (e: number) => {
     dispatch(changeIndex(e));
@@ -71,22 +98,15 @@ const Page4: React.FC = () => {
       />
       {/* view LinearGradient */}
       <View>
-        <LinearGradient
-          colors={[
-            '#0E470E',
-            '#1F660D',
-            '#20680DE5',
-            '#236E0DD9',
-            '#27750DB2',
-            '#236E0DD9',
-            '#20680DE5',
-            '#1F660D',
-            '#0E470E',
-          ]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}//Từ trái sang phải
-          style={styles.vLg}
-        ></LinearGradient>
+        {
+          data != null &&
+          <LinearGradient
+            colors={data?.arrColor}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.vLg}
+          ></LinearGradient>
+        }
       </View>
       <ScrollView style={styles.vScrollView}>
         {/* <View style={styles.vContent}> */}
@@ -97,12 +117,24 @@ const Page4: React.FC = () => {
           resizeMode='contain'
           style={styles.logo} />
         {/* title LineGradient */}
-        <LgTxtYellow title={"XIN CHÚC MỪNG!"}
-          size={24}
-          height={36} />
+        {
+          result === 'Green' ? (
+            <LgTxtYellow title={data?.title}
+              size={26}
+              height={36} />
+          ) : (result === 'Yellow' ? (
+            <LgTxtGreen title={data?.title}
+              size={26}
+              height={36} />
+          ) : (
+            <Text style={styles.titleRedMax}>
+              {data?.title}
+            </Text>
+          ))
+        }
         {/* content 1 */}
         <Text style={styles.content1}>
-          Bạn có một hệ Cơ-Xương-Khớp linh hoạt và có vẻ sức đề kháng của bạn cũng tốt. Cố gắng duy trì thể trạng tốt này nhé. Vì sau tuổi 40, sức khoẻ Cơ-Xương-Khớp có thể bị suy giảm.
+          {data?.content1}
         </Text>
         {/* 3 img */}
         <View style={styles.v3img}>
@@ -154,7 +186,7 @@ const Page4: React.FC = () => {
         </View>
         {/* content 2 */}
         <Text style={styles.content2}>
-          Tác động này có thể tạo ra những cơn đau nhức mỏi ảnh hưởng đến vận động hằng ngày.
+          {data?.content2}
         </Text>
         {/* img Max */}
         <View style={{ alignSelf: 'center', }}>
@@ -164,32 +196,68 @@ const Page4: React.FC = () => {
             resizeMode='contain'
           />
         </View>
-        {/* content 3 */}
-        <Text style={styles.content3}>
-          LỰA CHỌN GIÚP CƠ-XƯƠNG-KHỚP CHẮC KHOẺ
+        {/* footer 1 */}
+        <Text
+          style={styles.footer}
+        >
+          {data?.footer1}
         </Text>
+        {/* footer 2 */}
+        <Text
+          style={styles.footer}
+        >
+          {data?.footer2}
+        </Text>
+        {/* content 3 */}
+        {
+          result === 'Green' ? (
+            <LgTxtYellow title={data?.content3}
+              size={13}
+              height={30} />
+          ) : (result === 'Yellow' ? (
+            <LgTxtGreen title={data?.content3}
+              size={13}
+              height={30} />
+          ) : (
+            <Text style={styles.titleRedMin}>
+              {data?.content3}
+            </Text>
+          )
+          )
+        }
         {/* conten 4 */}
         <Text
           style={styles.content4}
         >
-          *Anlene 3 Khoẻ với công thức MovePro chứa các dưỡng chất Đạm, Canxi, Collagen cùng các Vitamin, Khoáng chất giúp
-          Cơ-Xương-Khớp chắc khỏe và tăng sức đề kháng, cho bạn thoải mái vận động, tận hưởng cuộc sống.
+          {data?.content4}
         </Text>
         {/* conten 5 */}
         {!seeMore ? (
           <TouchableOpacity
-
+            style={{ marginBottom: 10, marginTop: -15 }}
             onPress={() => setSeeMore(!seeMore)}>
-            <Text style={styles.content3}>
-              Xem thêm
-            </Text>
+            {
+              result === 'Green' ? (
+                <LgTxtYellow title={"Xem thêm"}
+                  size={12}
+                  height={30} />
+              ) : (result === 'Yellow' ? (
+                <LgTxtGreen title={"Xem thêm"}
+                  size={12}
+                  height={30} />
+              ) : (
+                <Text style={styles.titleRedMin}>
+                  Xem thêm
+                </Text>
+              )
+              )
+            }
           </TouchableOpacity>
         ) : (
           <Text
             style={styles.content5}
           >
-            *Anlene 3 Khoẻ với công thức MovePro chứa các dưỡng chất Đạm, Canxi, Collagen cùng các Vitamin, Khoáng chất giúp
-            Cơ-Xương-Khớp chắc khỏe và tăng sức đề kháng, cho bạn thoải mái vận động, tận hưởng cuộc sống.
+            {data?.content5}
           </Text>
         )}
         {/* btn MUA NGAY */}
@@ -262,10 +330,12 @@ const styles = StyleSheet.create({
     width: 87,
     height: 22,
     alignSelf: 'center',
+    marginBottom: 10,
+    marginTop: -10,
   },
   //txt
   content1: {
-    width: Dimensions.get('window').width * 0.92,
+    width: Dimensions.get('window').width * 0.9,
     color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '500',
@@ -279,15 +349,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '500',
-    textAlign: 'center',
-    fontFamily: 'SVN-Gotham',
-    margin: 5,
-    alignSelf: 'center',
-  },
-  content3: {
-    color: '#FFC200',
-    fontSize: 13,
-    fontWeight: '700',
     textAlign: 'center',
     fontFamily: 'SVN-Gotham',
     margin: 5,
@@ -364,6 +425,30 @@ const styles = StyleSheet.create({
   },
   imgMax: {
     width: Dimensions.get('window').width * 0.78,
-    height: Dimensions.get('window').height * 0.3,
+    height: Dimensions.get('window').height * 0.28,
+  },
+  titleRedMax: {
+    fontSize: 26,
+    color: '#DF1E13',
+    fontWeight: '700',
+    fontFamily: 'SVN-Gotham',
+    textAlign: 'center',
+  },
+  titleRedMin: {
+    fontSize: 13,
+    color: '#DF1E13',
+    fontWeight: '700',
+    fontFamily: 'SVN-Gotham',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  footer: {
+    width: Dimensions.get('window').width * 0.6,
+    fontSize: 7,
+    color: '#FFFFFF',
+    fontWeight: '400',
+    fontFamily: 'SVN-Gotham',
+    textAlign: 'center',
+    alignSelf: 'center',
   },
 })
