@@ -1,106 +1,195 @@
+import {
+    TouchableOpacity,
+    Image,
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    Dimensions,
+    SafeAreaView,
+    StatusBar,
+} from 'react-native'
 import React, { useEffect, useState } from 'react';
-import { View, Image, ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import storage from '@react-native-firebase/storage';
 import { useDispatch } from 'react-redux';
-import { backHome } from '../rtk/Reducer';
+import { changeIndex } from '../rtk/Reducer';
 import Header from '../components/Header';
+import LinearGradient from 'react-native-linear-gradient';
+// firebase
+import firestore from '@react-native-firebase/firestore';
+export interface DataPage6 {
+    title1: string;
+    title2: string;
+    img1: string;
+    img2: string;
+    img3: string;
+    img4: string;
+    content1: string,
+}
 const Page6: React.FC = () => {
 
     const dispatch = useDispatch();
-
-    const handleChangeIndex = () => {
-        dispatch(backHome());
-    };
-
-    // State để lưu URL hình ảnh và trạng thái loading
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [data, setData] = useState<DataPage6>();
+    // firebase
+    const fb = firestore().collection('Anlene-Page6');
 
     useEffect(() => {
-        // Hàm lấy URL ảnh từ Firebase Storage
-        const fetchImageUrl = async () => {
-            try {
-                // Đường dẫn đến file trong Firebase Storage
-                const reference = storage().ref('Anlene/p5-1.png');
+        fb.onSnapshot(querySnapshot => {
+            querySnapshot.forEach((doc) => {
+                setData({
+                    title1: doc.data()?.title1,
+                    title2: doc.data()?.title2,
+                    img1: doc.data()?.img1,
+                    img2: doc.data()?.img2,
+                    img3: doc.data()?.img3,
+                    img4: doc.data()?.img4,
+                    content1: doc.data()?.content1,
+                });
+            });
+        });
+    }, [])
 
-                // Lấy URL tải xuống từ Firebase Storage
-                const url: string = await reference.getDownloadURL();
+    const handleChangeIndex = (e: number) => {
+        dispatch(changeIndex(e));
+    };
 
-                setImageUrl(url); // Lưu URL vào state
-                setLoading(false); // Kết thúc trạng thái loading
-            } catch (error) {
-                console.error('Failed to fetch image URL:', error);
-                setLoading(false); // Xử lý lỗi và tắt loading
-            }
-        };
-
-        fetchImageUrl();
-    }, []);
-
-    // Nếu đang tải dữ liệu, hiển thị ActivityIndicator
-    if (loading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-        );
-    }
-
-    // Trả về giao diện chính
     return (
-        <View style={styles.container}>
-            <Header />
-            {imageUrl ? (
+        <SafeAreaView style={styles.container}>
+            <StatusBar
+                translucent
+                backgroundColor="transparent"
+                barStyle="light-content"
+            />
+            {/* view LinearGradient */}
+            <View>
+                <LinearGradient
+                    colors={[
+                        '#0E470E',
+                        '#1F660D',
+                        '#20680DE5',
+                        '#236E0DD9',
+                        '#27750DB2',
+                        '#236E0DD9',
+                        '#20680DE5',
+                        '#1F660D',
+                        '#0E470E',
+                    ]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}//Từ trái sang phải
+                    style={styles.vLg}
+                ></LinearGradient>
+            </View>
+            <ScrollView style={styles.vScrollView}>
+                {/* <View style={styles.vContent}> */}
+                <Header />
+                {/* logo */}
                 <Image
-                    source={{ uri: imageUrl }}
-                    style={styles.image} // Style cho hình ảnh
-                    resizeMode="cover" // Điều chỉnh cách hiển thị ảnh
+                    source={require("../../assets/images/logo.png")}
+                    resizeMode='contain'
+                    style={styles.logo} />
+                {/* title 1 */}
+                <Text style={styles.title1}>
+                    {data?.title1}
+                </Text>
+                {/* title 2 */}
+                <Text style={styles.title2}>
+                    {data?.title2}
+                </Text>
+                {/* img1 */}
+                <Image
+                    source={{ uri: data?.img1 }}
+                    style={[styles.imgMax]}
+                    resizeMode='contain'
                 />
-            ) : (
-                <View>
-                    <Text style={styles.errorText}>Error loading image.</Text>
-                </View>
-            )}
-            <Text>Page6</Text>
-            <TouchableOpacity style={styles.btn} onPress={() => {
-                handleChangeIndex();
-            }}>
-                <Text style={styles.txt_btn}>Nhận ngay</Text>
-            </TouchableOpacity>
-        </View>
+                {/* content 1 */}
+                <Text style={styles.content1}>
+                    {data?.content1}
+                </Text>
+                {/* img2 */}
+                <Image
+                    source={{ uri: data?.img2 }}
+                    style={[styles.imgMin]}
+                    resizeMode='contain'
+                />
+                {/* img3 */}
+                <Image
+                    source={{ uri: data?.img3 }}
+                    style={[styles.imgMin]}
+                    resizeMode='contain'
+                />
+                {/* img4 */}
+                <Image
+                    source={{ uri: data?.img4 }}
+                    style={[styles.imgMin]}
+                    resizeMode='contain'
+                />
+            </ScrollView>
+        </SafeAreaView >
     );
 };
 
-// Style cho các thành phần
+export default Page6
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-    },
-    image: {
-        width: 200,
-        height: 200,
-        borderRadius: 10,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
     },
-    errorText: {
-        color: 'red',
-        fontSize: 16,
+    // LinearGradient
+    vLg: {
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
     },
-    btn: {
-        width: 167,
-        height: 27,
-        backgroundColor: 'red'
+    vScrollView: {
+        position: 'absolute',
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        top: 0,
+        left: 0,
     },
-    txt_btn: {
-        fontSize: 20
+    logo: {
+        width: 98,
+        height: 26,
+        alignSelf: 'center',
+        marginTop: -5,
+        marginBottom: 5,
     },
-});
-
-export default Page6;
+    title1: {
+        fontSize: 24,
+        color: '#ECD24A',
+        fontWeight: '700',
+        fontFamily: 'SVN-Gotham',
+        textAlign: 'center',
+        marginVertical: 5,
+    },
+    title2: {
+        fontSize: 18,
+        color: '#ECD24A',
+        fontWeight: '700',
+        fontFamily: 'SVN-Gotham',
+        textAlign: 'center',
+        marginVertical: 5,
+    },
+    imgMax: {
+        width: Dimensions.get('window').width * 0.85,
+        height: Dimensions.get('window').height * 0.3,
+        alignSelf: 'center',
+        marginVertical: 5,
+    },
+    //txt
+    content1: {
+        width: Dimensions.get('window').width * 0.85,
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '500',
+        textAlign: 'center',
+        fontFamily: 'SVN-Gotham',
+        marginVertical: 5,
+        alignSelf: 'center',
+    },
+    imgMin: {
+        width: Dimensions.get('window').width * 0.8,
+        height: Dimensions.get('window').height * 0.2,
+        alignSelf: 'center',
+        marginVertical: 10,
+    },
+})

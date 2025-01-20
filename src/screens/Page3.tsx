@@ -12,22 +12,34 @@ import {
     ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetIndexPage2 } from '../rtk/Reducer';
 import { changeIndex } from '../rtk/Reducer';
 import Header from '../components/Header';
 import { PostInforUser } from '../rtk/API'
 import type { DataSend } from '../rtk/API'
 import type { AppDispatch } from '../rtk/Store';
 import LinearGradient from 'react-native-linear-gradient';
-import LgTxt from '../components/LgTxt';
+import LgTxtYellow from '../components/LgTxtYellow';
+import LgTxtGreen from '../components/LgTxtGreen';
 //icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // firebase
 import firestore from '@react-native-firebase/firestore';
+
+export interface DataPage3 {
+    arrColor: string[];
+    title: string;
+    content1: string,
+    content2: string,
+    content3: string,
+    content4: string,
+    content5: string,
+}
 const Page3: React.FC = () => {
 
     const dispatch: AppDispatch = useDispatch();
     const arrPage2: [] = useSelector((state: any) => state.app?.arrPage2);
+    const [data, setData] = useState<DataPage3>();
+    const [result, seResult] = useState<string>(``);
 
     const [name, setName] = useState<string>("");
     const [phone, setPhone] = useState<string>("");
@@ -38,72 +50,85 @@ const Page3: React.FC = () => {
     const [checkPhone, setCheckPhone] = useState<string>("");
     const [checkEmail, setCheckEmail] = useState<string>("");
 
-    const title1 = "XIN CHÚC MỪNG!";
     const [isChecked, setIsChecked] = useState(false);
 
     // firebase
-    const fb = firestore();
-    //.collection('Alene-users');
+    const fb = firestore().collection(`Anlene-Page3-${result}`);
 
     useEffect(() => {
-
-        // if (indexPage2 < 4) {
-        //     fb.onSnapshot(querySnapshot => {
-        //         querySnapshot.forEach((doc) => {
-        //             doc.data()?.id == indexPage2 && setData({
-        //                 id: doc.data()?.id,
-        //                 title: doc.data()?.title,
-        //                 img: doc.data()?.img,
-        //                 content: doc.data()?.content,
-        //             });
-        //         });
-        //     });
-        //     //reset laai chon
-        //     setResult(null);
-        // }
-
+        var countF: number = 0;
+        arrPage2.map((item) => {
+            item == false && countF++
+        })
+        console.log(countF)
+        if (countF >= 3) {
+            seResult(`Grey`);
+        } else if (countF >= 1) {
+            seResult(`Yellow`);
+        } else {
+            seResult(`Green`);
+        }
     }, [])
 
-    const validateName = (name: string) => {
+    useEffect(() => {
+        fb.onSnapshot(querySnapshot => {
+            querySnapshot.forEach((doc) => {
+                setData({
+                    arrColor: doc.data()?.arrColor,
+                    title: doc.data()?.title,
+                    content1: doc.data()?.content1,
+                    content2: doc.data()?.content2,
+                    content3: doc.data()?.content3,
+                    content4: doc.data()?.content4,
+                    content5: doc.data()?.content5,
+                });
+                //console.log(doc.data()?.arrColor)
+            });
+        });
+        //console.log(data)
+    }, [result])
+
+
+    const validateName = (n: string) => {
         // Kiểm tra họ tên: Không rỗng, chỉ chứa chữ cái, tối thiểu 2 từ
         const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
-        if (name.trim() == '') {
+        if (n.trim() === "") {
             setCheckName("Vui lòng nhập họ và tên");
-        } else if (!(nameRegex.test(name) && name.trim().split(' ').length >= 2)) {
+        } else if (!(nameRegex.test(n) && n.trim().split(' ').length >= 2)) {
             setCheckName("Nhập họ và tên sai định dạng");
         } else {
             //true
-            setCheckName('');
+            setCheckName("");
             return true;
         }
         return false;
     };
 
-    const validatePhone = (phone: string) => {
+    const validatePhone = (n: string) => {
         // Kiểm tra số điện thoại: chỉ chứa 10 hoặc 11 số, bắt đầu bằng 0
-        const phoneRegex = /^(0[0-9]{9,10})$/;
-        if (phone.trim() == '') {
+        const phoneRegex = /^0[0-9]{9,10}$/;
+        if (n.trim() === "") {
             setCheckPhone("Vui lòng nhập số điện thoại");
-        } else if (!phoneRegex.test(phone)) {
+        } else if (!phoneRegex.test(n)) {
             setCheckPhone("Nhập số điện thoại sai định dạng");
         } else {
             //true
-            setCheckPhone('');
+            setCheckPhone("");
             return true;
         }
         return false;
     };
 
-    const validateEmail = (email: string) => {
+    const validateEmail = (n: string) => {
         // Kiểm tra email hợp lệ
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (email.trim() == '') {
+        if (n.trim() === "") {
             setCheckEmail("Vui lòng nhập email");
-        } else if (!emailRegex.test(email)) {
+        } else if (!emailRegex.test(n)) {
             setCheckEmail("Nhập email sai định dạng");
         } else {
             //true
-            setCheckEmail('');
+            setCheckEmail("");
             return true;
         }
         return false;
@@ -120,6 +145,9 @@ const Page3: React.FC = () => {
     };
 
     const onClickCheck = () => {
+        validateName(name)
+        validatePhone(phone)
+        validateEmail(email)
         if (
             validateName(name)
             && validatePhone(phone)
@@ -132,33 +160,30 @@ const Page3: React.FC = () => {
 
     useEffect(() => {
         setIsCheck(
-            name.trim() !== ''
-            && phone.trim() !== ''
-            && email.trim() !== ''
+            name.trim() !== ""
+            && phone.trim() !== ""
+            && email.trim() !== ""
         );
     }, [name, phone, email])
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+            <StatusBar
+                translucent
+                backgroundColor="transparent"
+                barStyle="light-content"
+            />
             {/* view LinearGradient */}
             <View>
-                <LinearGradient
-                    colors={[
-                        '#0E470E',
-                        '#1F660D',
-                        '#20680DE5',
-                        '#236E0DD9',
-                        '#27750DB2',
-                        '#236E0DD9',
-                        '#20680DE5',
-                        '#1F660D',
-                        '#0E470E',
-                    ]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}//Từ trái sang phải
-                    style={styles.vLg}
-                ></LinearGradient>
+                {
+                    data != null &&
+                    <LinearGradient
+                        colors={data?.arrColor}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}//Từ trái sang phải
+                        style={styles.vLg}
+                    ></LinearGradient>
+                }
             </View>
             {/* view content  */}
             <ScrollView style={styles.vScrollView}>
@@ -170,28 +195,59 @@ const Page3: React.FC = () => {
                         resizeMode='contain'
                         style={styles.logo} />
                     {/* content 1 */}
-                    <Text style={styles.content1}>HOÀN THÀNH BÀI KIỂM TRA</Text>
+                    {
+                        result === 'Green' ? (
+                            <LgTxtYellow title={data?.content1}
+                                size={13}
+                                height={30} />
+                        ) : (result === 'Yellow' ? (
+                            <LgTxtGreen title={data?.content1}
+                                size={13}
+                                height={30} />
+                        ) : (
+                            <Text style={styles.titleRedMin}>
+                                {data?.content1}
+                            </Text>
+                        )
+                        )
+                    }
                     {/* title LineGradient */}
-                    <LgTxt title={title1}
-                        size={26}
-                        height={36} />
+                    {
+                        result === 'Green' ? (
+                            <LgTxtYellow title={data?.title}
+                                size={26}
+                                height={36} />
+                        ) : (result === 'Yellow' ? (
+                            <LgTxtGreen title={data?.title}
+                                size={26}
+                                height={36} />
+                        ) : (
+                            <Text style={styles.titleRedMax}>
+                                {data?.title}
+                            </Text>
+                        ))
+                    }
                     {/* content 2 */}
                     <Text style={styles.content2}>
-                        Bạn có hệ Cơ-Xương-Khớp linh hoạt và có vẻ sức đề kháng của bạn cũng tốt.
+                        {data?.content2}
                     </Text>
                     {/* content 3 */}
                     <Text style={styles.content3}>
-                        Điền thông tin bên dưới để xem đầy đủ
-                        kết quả và nhận ngay Voucher ưu đãi lên đến 100.000đ từ Anlene.
+                        {data?.content3}
                     </Text>
-
 
                     <View style={styles.form}>
                         {/* ho va ten */}
                         <View>
-                            <Text style={styles.label}>Họ tên:<Text style={styles.star}>*</Text></Text>
+                            <Text style={styles.label}>
+                                Họ tên:<Text style={styles.star}>*</Text>
+                            </Text>
                             <TextInput
-                                style={[styles.input]}
+                                style={[styles.input,
+                                checkName != ""
+                                && (result == 'Yellow'
+                                    ? styles.clBwInputGreen
+                                    : styles.clBwInputYellow)]}
                                 placeholder='Nhập họ và tên'
                                 keyboardType='ascii-capable'
                                 placeholderTextColor="#BABABA"
@@ -199,27 +255,51 @@ const Page3: React.FC = () => {
                                 onChangeText={setName}
                             />
                             {/* check name */}
-                            <Text>{checkName}</Text>
+                            <Text
+                                style={result == 'Yellow'
+                                    ? styles.checkGreen
+                                    : styles.checkYellow}
+                            >
+                                {checkName}
+                            </Text>
                         </View>
                         {/* Số điện thoại */}
                         <View>
-                            <Text style={styles.label}>Số điện thoại:<Text style={styles.star}>*</Text></Text>
+                            <Text style={styles.label}>
+                                Số điện thoại:<Text style={styles.star}>*</Text>
+                            </Text>
                             <TextInput
-                                style={[styles.input]}
+                                style={[styles.input,
+                                checkPhone != ""
+                                && (result == 'Yellow'
+                                    ? styles.clBwInputGreen
+                                    : styles.clBwInputYellow)]}
                                 placeholder='Nhập số điện thoại'
-                                keyboardType='phone-pad'
+                                keyboardType='ascii-capable'
                                 placeholderTextColor="#BABABA"
                                 value={phone}
                                 onChangeText={setPhone}
                             />
                             {/* check phone */}
-                            <Text>{checkPhone}</Text>
+                            <Text
+                                style={result == 'Yellow'
+                                    ? styles.checkGreen
+                                    : styles.checkYellow}
+                            >
+                                {checkPhone}
+                            </Text>
                         </View>
                         {/* email */}
                         <View>
-                            <Text style={styles.label}>Email:<Text style={styles.star}>*</Text></Text>
+                            <Text style={styles.label}>
+                                Email:<Text style={styles.star}>*</Text>
+                            </Text>
                             <TextInput
-                                style={[styles.input]}
+                                style={[styles.input,
+                                checkEmail != ""
+                                && (result == 'Yellow'
+                                    ? styles.clBwInputGreen
+                                    : styles.clBwInputYellow)]}
                                 placeholder='Nhập email'
                                 keyboardType='ascii-capable'
                                 placeholderTextColor="#BABABA"
@@ -227,24 +307,34 @@ const Page3: React.FC = () => {
                                 onChangeText={setEmail}
                             />
                             {/* check email */}
-                            <Text>{checkEmail}</Text>
+                            <Text
+                                style={result == 'Yellow'
+                                    ? styles.checkGreen
+                                    : styles.checkYellow}
+                            >
+                                {checkEmail}
+                            </Text>
                         </View>
                     </View>
                     {/* check box */}
                     <View style={styles.vCheckbox}>
-                        <TouchableOpacity style={styles.formCheckBox} onPress={() => setIsChecked(!isChecked)}>
+                        <TouchableOpacity
+                            style={styles.formCheckBox}
+                            onPress={() => setIsChecked(!isChecked)}
+                        >
                             {isChecked && (
                                 <MaterialCommunityIcons name="check" size={18} color="green" />
                             )}
                         </TouchableOpacity>
+                        {/* conten 4 */}
                         <Text style={styles.txtCheckBox}>
-                            Tôi đồng ý để Anlene Vietnam liên hệ trong bất kỳ chương trình quảng cáo sản phẩm hay khuyến mãi nào
+                            {data?.content4}
                         </Text>
                     </View>
-                    {/* conten 4 */}
+                    {/* conten 5 */}
                     <Text style={styles.content4}
                         numberOfLines={2}>
-                        Bằng cách điền bảng thông tin này, tôi đồng ý với việc thông tin của mình để xử lý dựa trên chính sách bảo mật của Anlene
+                        {data?.content5}
                     </Text>
                     {/* btn HOÀN THÀNH */}
                     <TouchableOpacity
@@ -255,7 +345,7 @@ const Page3: React.FC = () => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
@@ -403,6 +493,41 @@ const styles = StyleSheet.create({
         fontSize: 11,
         lineHeight: 20,
         flexShrink: 1, // Giúp chữ co lại khi cần
+    },
+    titleRedMax: {
+        fontSize: 26,
+        color: '#DF1E13',
+        fontWeight: '700',
+        fontFamily: 'SVN-Gotham',
+        textAlign: 'center',
+    },
+    titleRedMin: {
+        fontSize: 13,
+        color: '#DF1E13',
+        fontWeight: '700',
+        fontFamily: 'SVN-Gotham',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    checkYellow: {
+        fontSize: 12,
+        color: '#ECD24A',
+        fontWeight: '500',
+        fontFamily: 'SVN-Gotham',
+    },
+    checkGreen: {
+        fontSize: 12,
+        color: '#376E48',
+        fontWeight: '500',
+        fontFamily: 'SVN-Gotham',
+    },
+    clBwInputGreen: {
+        borderColor: '#376E48',
+        borderWidth: 1.5,
+    },
+    clBwInputYellow: {
+        borderColor: '#ECD24A',
+        borderWidth: 1.5,
     },
 });
 

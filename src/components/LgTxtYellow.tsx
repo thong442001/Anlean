@@ -6,7 +6,7 @@ interface BtnBorderProps {
     size: number;
     height: number,
 }
-const LgTxt: React.FC<BtnBorderProps> = ({ title, size, height }) => {
+const LgTxtYellow: React.FC<BtnBorderProps> = ({ title, size, height }) => {
     // Chia các dòng bằng cách sử dụng "\n"
     const lines = title?.split('\n');
 
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LgTxt;
+export default LgTxtYellow;

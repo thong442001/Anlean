@@ -7,9 +7,7 @@ import Page3 from '../screens/Page3';
 import Page4 from '../screens/Page4';
 import Page5 from '../screens/Page5';
 import Page6 from '../screens/Page6';
-import { useDispatch, useSelector } from 'react-redux';
-import { getDataPage } from '../rtk/API'
-import type { AppDispatch } from '../rtk/Store';
+import { useSelector } from 'react-redux';
 
 export type RootStackParams = {
   Page1: undefined;
@@ -24,15 +22,7 @@ const Stack = createNativeStackNavigator<RootStackParams>();
 
 const AppNavigation: React.FC = () => {
 
-  const dispatch: AppDispatch = useDispatch();
   const index = useSelector((state: any) => state.app?.index);
-  const dataURL = useSelector((state: any) => state.app?.dataURL);
-
-  useEffect(() => {
-    //dataURL == null && dispatch(getDataPage());
-    dispatch(getDataPage());
-    console.log(dataURL);
-  }, [])
 
   return (
     <NavigationContainer>

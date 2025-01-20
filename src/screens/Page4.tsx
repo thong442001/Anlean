@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeIndex } from '../rtk/Reducer';
 import Header from '../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import LgTxt from '../components/LgTxt';
+import LgTxtYellow from '../components/LgTxtYellow';
 import BtnBorder from '../components/BtnBorder';
 // firebase
 import firestore from '@react-native-firebase/firestore';
@@ -64,7 +64,11 @@ const Page4: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
       {/* view LinearGradient */}
       <View>
         <LinearGradient
@@ -93,7 +97,7 @@ const Page4: React.FC = () => {
           resizeMode='contain'
           style={styles.logo} />
         {/* title LineGradient */}
-        <LgTxt title={"XIN CHÚC MỪNG!"}
+        <LgTxtYellow title={"XIN CHÚC MỪNG!"}
           size={24}
           height={36} />
         {/* content 1 */}
@@ -173,7 +177,9 @@ const Page4: React.FC = () => {
         </Text>
         {/* conten 5 */}
         {!seeMore ? (
-          <TouchableOpacity onPress={() => setSeeMore(!seeMore)}>
+          <TouchableOpacity
+
+            onPress={() => setSeeMore(!seeMore)}>
             <Text style={styles.content3}>
               Xem thêm
             </Text>
@@ -188,7 +194,10 @@ const Page4: React.FC = () => {
         )}
         {/* btn MUA NGAY */}
         <View style={{ alignSelf: 'center', }}>
-          <BtnBorder title='MUA NGAY' onpress={() => handleChangeIndex(1)} />
+          <BtnBorder
+            title='MUA NGAY'
+            onpress={() => handleChangeIndex(1)}
+          />
         </View>
         {/* </View> */}
       </ScrollView>

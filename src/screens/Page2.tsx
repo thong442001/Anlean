@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addArrPage2 } from '../rtk/Reducer';
 import { changeIndex } from '../rtk/Reducer';
 import { changeIndexPage2 } from '../rtk/Reducer';
+import { resetIndexPage2 } from '../rtk/Reducer';
 import Header from '../components/Header';
-import LgTxt from '../components/LgTxt';
+import LgTxtYellow from '../components/LgTxtYellow';
 import BtnRed from '../components/BtnRed';
 import LinearGradient from 'react-native-linear-gradient';
 // firebase
@@ -24,13 +25,14 @@ const Page2: React.FC = () => {
   const indexPage2 = useSelector((state: any) => state.app?.indexPage2);
   const arrPage2 = useSelector((state: any) => state.app?.arrPage2);
   const fb = firestore().collection('Anlene-Page2');
-  const [result, setResult] = useState<boolean | null>(arrPage2[indexPage2]);
+  const [result, setResult] =
+    useState<boolean | null>(arrPage2[indexPage2]);
   const [data, setData] = useState<DataPage2>();
   const title1: string = "KIỂM TRA CƠ - XƯƠNG - KHỚP";
   const footer: string = "*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái. Đảm bảo vị trí tập an toàn để không té ngã.";
   const arrMenu: string[] = ["Cơ", "Xương", "Khớp", "Đề kháng"];
 
-  useEffect(() => {
+  const callFB = () => {
     setTimeout(() => {
       if (indexPage2 < 4) {
         fb.onSnapshot(querySnapshot => {
@@ -47,6 +49,15 @@ const Page2: React.FC = () => {
         setResult(null);
       }
     }, 200);
+  }
+
+  useEffect(() => {
+    dispatch(resetIndexPage2());
+    callFB();
+  }, [])
+
+  useEffect(() => {
+    callFB();
   }, [indexPage2])
 
   const choice = (b: boolean) => {
@@ -66,7 +77,11 @@ const Page2: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
       {/* view LinearGradient */}
       <View>
         <LinearGradient
@@ -114,7 +129,9 @@ const Page2: React.FC = () => {
                 ) : (
                   index != indexPage2 ? (
                     < View style={styles.circleNumber}>
-                      <Text style={styles.txtCircleNumber}>{index + 1}</Text>
+                      <Text style={styles.txtCircleNumber}>
+                        {index + 1}
+                      </Text>
                     </View>
                   ) : <Image
                     source={require('../../assets/images/p2-vector-dang-chon.png')}
@@ -129,14 +146,16 @@ const Page2: React.FC = () => {
         </View>
         {/* title2 */}
         <View style={{ marginTop: -10 }}>
-          <LgTxt title={data?.title} size={18} height={40} />
+          <LgTxtYellow title={data?.title} size={18} height={40} />
         </View>
-        {/* <Text>page 2 - {indexPage2 + 1}</Text> */}
         {/* img */}
         <View style={styles.vImg}>
           <Image
             source={{ uri: data?.img }}
-            style={[styles.imgTong, result ? styles.ImgDaChonTrue : (result == false && styles.ImgDaChonFalse)]} // Style cho hình ảnh
+            // Style cho hình ảnh
+            style={[styles.imgTong,
+            result ? styles.ImgDaChonTrue
+              : (result == false && styles.ImgDaChonFalse)]}
           />
           {
             result ? <Image
@@ -176,7 +195,8 @@ const Page2: React.FC = () => {
         <View style={styles.vBtnConform}>
           <BtnRed
             title="XÁC NHẬN"
-            disabled={(indexPage2 >= 3 && result != null) ? false : true}
+            disabled={(indexPage2 >= 3 && result != null)
+              ? false : true}
             onpress={conform}
           />
         </View>
