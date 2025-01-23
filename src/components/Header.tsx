@@ -10,13 +10,21 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { changeIndex } from '../rtk/Reducer';
 import { backHome } from '../rtk/Reducer';
-const Header: React.FC = () => {
+interface HeaderProps {
+    onBack?: () => void;
+}
+const Header: React.FC<HeaderProps> = ({ onBack }) => {
 
     const dispatch = useDispatch();
     const index = useSelector((state: any) => state.app?.index);
 
     const handleChangeIndex = (e: number) => {
-        dispatch(changeIndex(e));
+        //console.log(index);
+        if (index === 3 && onBack != null) {
+            onBack();
+        } else {
+            dispatch(changeIndex(e));
+        }
     };
 
     const handleBackHome = () => {

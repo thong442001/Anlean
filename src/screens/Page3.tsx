@@ -20,6 +20,7 @@ import type { AppDispatch } from '../rtk/Store';
 import LinearGradient from 'react-native-linear-gradient';
 import LgTxtYellow from '../components/LgTxtYellow';
 import LgTxtGreen from '../components/LgTxtGreen';
+import Dialog from '../components/Dialog';
 //icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // firebase
@@ -38,8 +39,11 @@ const Page3: React.FC = () => {
 
     const dispatch: AppDispatch = useDispatch();
     const arrPage2: [] = useSelector((state: any) => state.app?.arrPage2);
+    const color: string = useSelector((state: any) => state.app?.color);
+
     const [data, setData] = useState<DataPage3>();
-    const [result, seResult] = useState<string>(``);
+    const [visible, setVisible] =
+        useState<boolean>(false);
 
     const [name, setName] = useState<string>("");
     const [phone, setPhone] = useState<string>("");
@@ -53,22 +57,7 @@ const Page3: React.FC = () => {
     const [isChecked, setIsChecked] = useState(false);
 
     // firebase
-    const fb = firestore().collection(`Anlene-Page3-${result}`);
-
-    useEffect(() => {
-        var countF: number = 0;
-        arrPage2.map((item) => {
-            item == false && countF++
-        })
-        console.log(countF)
-        if (countF >= 3) {
-            seResult(`Grey`);
-        } else if (countF >= 1) {
-            seResult(`Yellow`);
-        } else {
-            seResult(`Green`);
-        }
-    }, [])
+    const fb = firestore().collection(`Anlene-Page3-${color}`);
 
     useEffect(() => {
         fb.onSnapshot(querySnapshot => {
@@ -86,7 +75,7 @@ const Page3: React.FC = () => {
             });
         });
         //console.log(data)
-    }, [result])
+    }, [])
 
 
     const validateName = (n: string) => {
@@ -166,6 +155,11 @@ const Page3: React.FC = () => {
         );
     }, [name, phone, email])
 
+    //go back
+    const handleChangeIndex = (e: number) => {
+        dispatch(changeIndex(e))
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar
@@ -188,7 +182,9 @@ const Page3: React.FC = () => {
             {/* view content  */}
             <ScrollView style={styles.vScrollView}>
                 <View style={styles.vContent}>
-                    <Header />
+                    <Header
+                        onBack={() => setVisible(true)} // Dialog 
+                    />
                     {/* logo */}
                     <Image
                         source={require("../../assets/images/logo.png")}
@@ -196,11 +192,11 @@ const Page3: React.FC = () => {
                         style={styles.logo} />
                     {/* content 1 */}
                     {
-                        result === 'Green' ? (
+                        color === 'Green' ? (
                             <LgTxtYellow title={data?.content1}
                                 size={13}
                                 height={30} />
-                        ) : (result === 'Yellow' ? (
+                        ) : (color === 'Yellow' ? (
                             <LgTxtGreen title={data?.content1}
                                 size={13}
                                 height={30} />
@@ -213,11 +209,11 @@ const Page3: React.FC = () => {
                     }
                     {/* title LineGradient */}
                     {
-                        result === 'Green' ? (
+                        color === 'Green' ? (
                             <LgTxtYellow title={data?.title}
                                 size={26}
                                 height={36} />
-                        ) : (result === 'Yellow' ? (
+                        ) : (color === 'Yellow' ? (
                             <LgTxtGreen title={data?.title}
                                 size={26}
                                 height={36} />
@@ -245,7 +241,7 @@ const Page3: React.FC = () => {
                             <TextInput
                                 style={[styles.input,
                                 checkName != ""
-                                && (result == 'Yellow'
+                                && (color == 'Yellow'
                                     ? styles.clBwInputGreen
                                     : styles.clBwInputYellow)]}
                                 placeholder='Nhập họ và tên'
@@ -256,7 +252,7 @@ const Page3: React.FC = () => {
                             />
                             {/* check name */}
                             <Text
-                                style={result == 'Yellow'
+                                style={color == 'Yellow'
                                     ? styles.checkGreen
                                     : styles.checkYellow}
                             >
@@ -271,7 +267,7 @@ const Page3: React.FC = () => {
                             <TextInput
                                 style={[styles.input,
                                 checkPhone != ""
-                                && (result == 'Yellow'
+                                && (color == 'Yellow'
                                     ? styles.clBwInputGreen
                                     : styles.clBwInputYellow)]}
                                 placeholder='Nhập số điện thoại'
@@ -282,7 +278,7 @@ const Page3: React.FC = () => {
                             />
                             {/* check phone */}
                             <Text
-                                style={result == 'Yellow'
+                                style={color == 'Yellow'
                                     ? styles.checkGreen
                                     : styles.checkYellow}
                             >
@@ -297,7 +293,7 @@ const Page3: React.FC = () => {
                             <TextInput
                                 style={[styles.input,
                                 checkEmail != ""
-                                && (result == 'Yellow'
+                                && (color == 'Yellow'
                                     ? styles.clBwInputGreen
                                     : styles.clBwInputYellow)]}
                                 placeholder='Nhập email'
@@ -308,7 +304,7 @@ const Page3: React.FC = () => {
                             />
                             {/* check email */}
                             <Text
-                                style={result == 'Yellow'
+                                style={color == 'Yellow'
                                     ? styles.checkGreen
                                     : styles.checkYellow}
                             >
@@ -344,6 +340,19 @@ const Page3: React.FC = () => {
                         <Text style={styles.txt}>HOÀN THÀNH</Text>
                     </TouchableOpacity>
                 </View>
+
+                {/* Dialog */}
+                <Dialog
+                    visible={visible}
+                    title='THÔNG BÁO!'
+                    content={`Bạn có muốn huỷ bỏ kết quả
+                            \nkiểm tra sức khoẻ trước đó không?`}
+                    onCancel={() => setVisible(!visible)}
+                    onConfirm={() => handleChangeIndex(-1)}
+                    btnCancel="HỦY"
+                    btnConfirm="ĐỒNG Ý"
+                />
+
             </ScrollView>
         </SafeAreaView >
     );

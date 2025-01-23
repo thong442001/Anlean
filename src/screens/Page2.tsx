@@ -5,10 +5,12 @@ import { addArrPage2 } from '../rtk/Reducer';
 import { changeIndex } from '../rtk/Reducer';
 import { changeIndexPage2 } from '../rtk/Reducer';
 import { resetIndexPage2 } from '../rtk/Reducer';
+import { changeColor } from '../rtk/Reducer';
 import Header from '../components/Header';
 import LgTxtYellow from '../components/LgTxtYellow';
 import BtnRed from '../components/BtnRed';
 import LinearGradient from 'react-native-linear-gradient';
+import Dialog from '../components/Dialog';
 // firebase
 import firestore from '@react-native-firebase/firestore';
 
@@ -27,32 +29,34 @@ const Page2: React.FC = () => {
   const fb = firestore().collection('Anlene-Page2');
   const [result, setResult] =
     useState<boolean | null>(arrPage2[indexPage2]);
+  const [visible, setVisible] =
+    useState<boolean>(false);
+  const [isDisabled, setIsDisabled] =
+    useState<boolean>(false);
   const [data, setData] = useState<DataPage2>();
   const title1: string = "KIỂM TRA CƠ - XƯƠNG - KHỚP";
   const footer: string = "*Lưu ý: Hãy dừng bài tập ngay nếu cảm thấy không thoải mái. Đảm bảo vị trí tập an toàn để không té ngã.";
   const arrMenu: string[] = ["Cơ", "Xương", "Khớp", "Đề kháng"];
 
   const callFB = () => {
-    setTimeout(() => {
-      if (indexPage2 < 4) {
-        fb.onSnapshot(querySnapshot => {
-          querySnapshot.forEach((doc) => {
-            doc.data()?.id == indexPage2 && setData({
-              id: doc.data()?.id,
-              title: doc.data()?.title,
-              img: doc.data()?.img,
-              content: doc.data()?.content,
-            });
+    if (indexPage2 < 4) {
+      fb.onSnapshot(querySnapshot => {
+        querySnapshot.forEach((doc) => {
+          doc.data()?.id == indexPage2 && setData({
+            id: doc.data()?.id,
+            title: doc.data()?.title,
+            img: doc.data()?.img,
+            content: doc.data()?.content,
           });
         });
-        //reset laai chon
-        setResult(null);
-      }
-    }, 200);
+      });
+    }
   }
 
   useEffect(() => {
     dispatch(resetIndexPage2());
+    //reset lại result
+    setResult(null);
     callFB();
   }, [])
 
@@ -61,18 +65,24 @@ const Page2: React.FC = () => {
   }, [indexPage2])
 
   const choice = (b: boolean) => {
+    setResult(b)
+    //console.log(b)
+    setIsDisabled(true)// khóa onPress
     setTimeout(() => {
-      setResult(b)
-      console.log(b)
       dispatch(addArrPage2(b));
       if (indexPage2 < 3) {
         dispatch(changeIndexPage2(1));
       }
-    }, 800);
+      //reset lại result
+      indexPage2 < 3 && setResult(null);
+      //reset lại isDisabled
+      setIsDisabled(false);
+    }, 1000);
   }
 
   const conform = () => {
     dispatch(changeIndex(1));
+    dispatch(changeColor());// tính color cho page3-4
   }
 
   return (
@@ -171,9 +181,12 @@ const Page2: React.FC = () => {
         <Text style={styles.content}>{data?.content}</Text>
         {/* chon */}
         <View style={styles.vtBtnChon}>
+          {/* Btn true */}
           <TouchableOpacity
             style={[styles.btnChon, result && styles.btnDaChon]}
-            onPress={() => choice(true)}>
+            onPress={() => choice(true)}
+            disabled={isDisabled}
+          >
             <Image
               source={require('../../assets/images/p2-icon-duoc.png')}
               style={styles.iconOnBtn}
@@ -181,9 +194,12 @@ const Page2: React.FC = () => {
             <Text style={styles.txtOnBtn}>Được</Text>
           </TouchableOpacity>
 
+          {/* Btn false */}
           <TouchableOpacity
             style={[styles.btnChon, result == false && styles.btnDaChon]}
-            onPress={() => choice(false)}>
+            onPress={() => choice(false)}
+            disabled={isDisabled}
+          >
             <Image
               source={require('../../assets/images/p2-icon-khong-duoc.png')}
               style={styles.iconOnBtn}
@@ -197,11 +213,25 @@ const Page2: React.FC = () => {
             title="XÁC NHẬN"
             disabled={(indexPage2 >= 3 && result != null)
               ? false : true}
-            onpress={conform}
+            onpress={() => setVisible(true)}
           />
         </View>
         {/* footer */}
         <Text style={styles.footer}>{footer}</Text>
+
+        {/* Dialog */}
+        <Dialog
+          visible={visible}
+          title='CẢM ƠN'
+          content={`Bạn đã tham gia bài kiểm tra sức khoẻ
+                    \nHãy tiếp tục để có thể nhận kết quả
+                    \nkiểm tra sức khoẻ của bạn.`}
+          onCancel={() => setVisible(!visible)}
+          onConfirm={conform}
+          btnCancel="HỦY"
+          btnConfirm="TIẾP TỤC"
+        />
+
       </View>
     </SafeAreaView >
   );

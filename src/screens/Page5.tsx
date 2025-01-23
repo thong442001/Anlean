@@ -33,7 +33,9 @@ export interface DataPage5 {
 const Page5: React.FC = () => {
 
   const dispatch = useDispatch();
+  const color: string = useSelector((state: any) => state.app?.color);
   const [data, setData] = useState<DataPage5>();
+  const [url, setUrl] = useState<string>("");
 
   // firebase
   const fb = firestore().collection('Anlene-Page5');
@@ -54,6 +56,14 @@ const Page5: React.FC = () => {
         });
       });
     });
+    //link sp
+    if (color == "Grey") {
+      setUrl("https://www.lazada.vn/products/sua-bot-anlene-gold-3x-huong-vanilla-lon-900g-i733486477-s1880950218.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253Aanlene%253Bnid%253A733486477%253Bsrc%253ALazadaMainSrp%253Brn%253A06bd12f115ee15178b6ca16e6618eccd%253Bregion%253Avn%253Bsku%253A733486477_VNAMZ%253Bprice%253A425000%253Bclient%253Adesktop%253Bsupplier_id%253A200161815347%253Bbiz_source%253Ah5_hp%253Bslot%253A25%253Butlog_bucket_id%253A470687%253Basc_category_id%253A14783%253Bitem_id%253A733486477%253Bsku_id%253A1880950218%253Bshop_id%253A1482611%253BtemplateInfo%253A107883_A3_D_E%2523-1_C%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=vi&location=H%E1%BB%93%20Ch%C3%AD%20Minh&price=4.25E%205&priceCompare=skuId%3A1880950218%3Bsource%3Alazada-search-voucher%3Bsn%3A06bd12f115ee15178b6ca16e6618eccd%3BoriginPrice%3A425000%3BdisplayPrice%3A425000%3BsinglePromotionId%3A-1%3BsingleToolCode%3AmockedSalePrice%3BvoucherPricePlugin%3A0%3Btimestamp%3A1737614199673&ratingscore=5.0&request_id=06bd12f115ee15178b6ca16e6618eccd&review=28&sale=73&search=1&source=search&spm=a2o4n.searchlist.list.25&stock=1")
+    } else if (color == "Yellow") {
+      setUrl("https://www.lazada.vn/products/date-thang-52025sua-anlene-gold-5x-hop-dung-thu-tien-loi-2goi-x-40g-i2923975868-s14123624670.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253Aanlene%253Bnid%253A2923975868%253Bsrc%253ALazadaMainSrp%253Brn%253A06bd12f115ee15178b6ca16e6618eccd%253Bregion%253Avn%253Bsku%253A2923975868_VNAMZ%253Bprice%253A33000%253Bclient%253Adesktop%253Bsupplier_id%253A200643152588%253Bbiz_source%253Ah5_hp%253Bslot%253A26%253Butlog_bucket_id%253A470687%253Basc_category_id%253A14783%253Bitem_id%253A2923975868%253Bsku_id%253A14123624670%253Bshop_id%253A4725636%253BtemplateInfo%253A107883_D_E%2523-1_A3_C%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=vi&location=H%E1%BB%93%20Ch%C3%AD%20Minh&price=3.3E%204&priceCompare=skuId%3A14123624670%3Bsource%3Alazada-search-voucher%3Bsn%3A06bd12f115ee15178b6ca16e6618eccd%3BoriginPrice%3A33000%3BdisplayPrice%3A33000%3BsinglePromotionId%3A-1%3BsingleToolCode%3A-1%3BvoucherPricePlugin%3A0%3Btimestamp%3A1737614199673&ratingscore=&request_id=06bd12f115ee15178b6ca16e6618eccd&review=&sale=0&search=1&source=search&spm=a2o4n.searchlist.list.26&stock=1")
+    } else {
+      setUrl("https://www.lazada.vn/products/giam-5-toi-da-60k-cho-don-hang-tu-649k-sua-bot-anlene-gold-5x-huong-vanilla-hop-giay-12kg-i2318240975-s11268696286.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253Aanlene%253Bnid%253A2318240975%253Bsrc%253ALazadaMainSrp%253Brn%253A06bd12f115ee15178b6ca16e6618eccd%253Bregion%253Avn%253Bsku%253A2318240975_VNAMZ%253Bprice%253A661000%253Bclient%253Adesktop%253Bsupplier_id%253A200230437197%253Bbiz_source%253Ah5_hp%253Bslot%253A0%253Butlog_bucket_id%253A470687%253Basc_category_id%253A14783%253Bitem_id%253A2318240975%253Bsku_id%253A11268696286%253Bshop_id%253A3330565%253BtemplateInfo%253A107883_D_E%2523-1_A3_C%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=vi&location=H%E1%BB%93%20Ch%C3%AD%20Minh&price=6.61E%205&priceCompare=skuId%3A11268696286%3Bsource%3Alazada-search-voucher%3Bsn%3A06bd12f115ee15178b6ca16e6618eccd%3BoriginPrice%3A661000%3BdisplayPrice%3A661000%3BsinglePromotionId%3A-1%3BsingleToolCode%3AmockedSalePrice%3BvoucherPricePlugin%3A0%3Btimestamp%3A1737614199672&ratingscore=4.896694214876033&request_id=06bd12f115ee15178b6ca16e6618eccd&review=1452&sale=5449&search=1&source=search&spm=a2o4n.searchlist.list.0&stock=1")
+    }
   }, [])
 
   const handleChangeIndex = (e: number) => {
@@ -61,7 +71,6 @@ const Page5: React.FC = () => {
   };
 
   const handleOpenLink = async () => {
-    const url = `https://www.google.com`; // Đường dẫn bạn muốn mở
     await Linking.openURL(url)
     // try {
     //   // Kiểm tra xem liên kết có khả dụng không

@@ -37,29 +37,13 @@ export interface DataPage4 {
 const Page4: React.FC = () => {
 
   const dispatch = useDispatch();
-  const arrPage2: [] = useSelector((state: any) => state.app?.arrPage2);
-  const [result, seResult] = useState<string>(``);
+  const color: string = useSelector((state: any) => state.app?.color);
 
   const [data, setData] = useState<DataPage4>();
   const [seeMore, setSeeMore] = useState<boolean>(false);
 
   // firebase
-  const fb = firestore().collection(`Anlene-Page4-${result}`);
-
-  useEffect(() => {
-    var countF: number = 0;
-    arrPage2.map((item) => {
-      item == false && countF++
-    })
-    console.log(countF)
-    if (countF >= 3) {
-      seResult(`Grey`);
-    } else if (countF >= 1) {
-      seResult(`Yellow`);
-    } else {
-      seResult(`Green`);
-    }
-  }, [])
+  const fb = firestore().collection(`Anlene-Page4-${color}`);
 
   useEffect(() => {
     fb.onSnapshot(querySnapshot => {
@@ -83,7 +67,7 @@ const Page4: React.FC = () => {
       });
     });
     //console.log(data)
-  }, [result])
+  }, [])
 
   const handleChangeIndex = (e: number) => {
     dispatch(changeIndex(e));
@@ -118,11 +102,11 @@ const Page4: React.FC = () => {
           style={styles.logo} />
         {/* title LineGradient */}
         {
-          result === 'Green' ? (
+          color === 'Green' ? (
             <LgTxtYellow title={data?.title}
               size={26}
               height={36} />
-          ) : (result === 'Yellow' ? (
+          ) : (color === 'Yellow' ? (
             <LgTxtGreen title={data?.title}
               size={26}
               height={36} />
@@ -210,11 +194,11 @@ const Page4: React.FC = () => {
         </Text>
         {/* content 3 */}
         {
-          result === 'Green' ? (
+          color === 'Green' ? (
             <LgTxtYellow title={data?.content3}
               size={13}
               height={30} />
-          ) : (result === 'Yellow' ? (
+          ) : (color === 'Yellow' ? (
             <LgTxtGreen title={data?.content3}
               size={13}
               height={30} />
@@ -237,11 +221,11 @@ const Page4: React.FC = () => {
             style={{ marginBottom: 10, marginTop: -15 }}
             onPress={() => setSeeMore(!seeMore)}>
             {
-              result === 'Green' ? (
+              color === 'Green' ? (
                 <LgTxtYellow title={"Xem thêm"}
                   size={12}
                   height={30} />
-              ) : (result === 'Yellow' ? (
+              ) : (color === 'Yellow' ? (
                 <LgTxtGreen title={"Xem thêm"}
                   size={12}
                   height={30} />
